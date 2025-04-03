@@ -28,6 +28,14 @@ After running Dijkstra’s algorithm, the shortest path is highlighted:
 
 ---
 
+## 🏁 Example Path  
+After running Dijkstra’s algorithm, the shortest path is highlighted:
+
+<img src="https://github.com/user-attachments/assets/564bb3a4-2645-469d-9826-7026477e3564" width="600" alt="Final Shortest Path">
+
+---
+
+
 ## 🚀 How to Clone and Run the Project  
 
 ### **1️⃣ Clone the Repository**  
