@@ -16,7 +16,7 @@ function Main() {
     );
   };
 
-  const [grid, setGrid] = useState(createGrid(20, 20));
+  const [grid, setGrid] = useState(createGrid(15, 15));
   const [activeGridState, setActiveGridState] = useState("empty");
   const [dijkstraInitial, setDijkstraInitial] = useState(null);
   const [dijkstraFinal, setDijkstraFinal] = useState(null);
@@ -24,7 +24,7 @@ function Main() {
   const [isRunning, setIsRunning] = useState(false);
   useEffect(() => {
     const updateGridSize = () => {
-      const newGridSize = window.innerWidth < 600 ? 5 : 20;
+      const newGridSize = window.innerWidth < 600 ? 5 : 15;
       setGrid(createGrid(newGridSize, newGridSize));
       setDijkstraInitial(null);
       setDijkstraFinal(null);
