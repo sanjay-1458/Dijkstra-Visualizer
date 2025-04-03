@@ -39,7 +39,6 @@ function Main() {
     return () => window.removeEventListener("resize", updateGridSize);
   }, []);
 
-
   const toggleTool = (tool) => {
     setActiveGridState((prev) => (prev === tool ? "empty" : tool));
   };
@@ -187,8 +186,8 @@ function Main() {
         [-1, 0],
       ];
 
-      const rows = 20,
-        cols = 20;
+      const rows = grid.length,
+        cols = grid[0].length;
       let queue = [{ ...dijkstraInitial, path: [] }];
       let visited = new Set();
 
@@ -272,8 +271,8 @@ function Main() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen text-white text-center bg-gray-900">
-      <div className="flex flex-wrap justify-center gap-4 w-full p-4">
+    <div className="flex flex-col items-center justify-center min-h-screen text-white text-center bg-gray-900 p-4">
+      <div className="flex flex-wrap justify-center gap-2 sm:gap-4 w-full p-2 sm:p-4 mt-3 sm:mt-6">
         <button
           onClick={() => toggleTool("source")}
           disabled={isRunning}
@@ -308,36 +307,42 @@ function Main() {
           Walls
         </button>
       </div>
-      <div
-        className="grid grid-cols-20 gap-1 border border-white"
-        style={{ "--cols": grid[0]?.length }}
-      >
-        {grid.map((row, rowIndex) =>
-          row.map((cell, colIndex) => (
-            <div
-              key={`${rowIndex}-${colIndex}`}
-              onClick={() => handleCellClick(rowIndex, colIndex)}
-              className={`cell w-6 h-6 border border-gray-600 transition-all ${
-                cell.isSource
-                  ? "bg-blue-400"
-                  : cell.isDestination
-                  ? "bg-green-400"
-                  : cell.isWall
-                  ? "bg-red-600"
-                  : cell.isPath
-                  ? "bg-blue-500"
-                  : "bg-gray-800"
-              }`}
-            ></div>
-          ))
-        )}
+      <div className="bg-white-500">
+        <div
+          className=" gap-1 border border-white mt-1 sm:mt-0 mb-1 sm:mb-6 sm:h-auto gap-[5%] sm:gap-6"
+          style={{
+            display: "grid",
+            gridTemplateColumns: `repeat(${grid[0]?.length}, 1fr)`,
+            gap: "5px",
+          }}
+        >
+          {grid.map((row, rowIndex) =>
+            row.map((cell, colIndex) => (
+              <div
+                key={`${rowIndex}-${colIndex}`}
+                onClick={() => handleCellClick(rowIndex, colIndex)}
+                className={`cell w-6 h-6 border border-gray-600 transition-all ${
+                  cell.isSource
+                    ? "bg-blue-400"
+                    : cell.isDestination
+                    ? "bg-green-400"
+                    : cell.isWall
+                    ? "bg-red-600"
+                    : cell.isPath
+                    ? "bg-blue-500"
+                    : "bg-gray-800"
+                }`}
+              ></div>
+            ))
+          )}
+        </div>
       </div>
-      <div className="flex flex-wrap justify-center gap-8 w-full p-1">
+      <div className="flex flex-wrap justify-center gap-3 sm:gap-8 w-full p-2 sm:p-4 mb-3 sm:mb-6">
         <button
           onClick={startDijkstra}
           disabled={isRunning}
-          className="text-2xl px-6 py-3 rounded-lg bg-purple-500 hover:bg-purple-600 transition-all duration-300 
-        shadow-purple-300 mt-4 scale-105 active:scale-110"
+          className="text-xl sm:text-2xl px-5 sm:px-6 py-2 sm:py-3 rounded-lg bg-purple-500 hover:bg-purple-600 transition-all duration-300 
+      shadow-purple-300 mt-3 sm:mt-4 scale-105 active:scale-110"
         >
           Start
         </button>
