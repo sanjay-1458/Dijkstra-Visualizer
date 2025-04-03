@@ -1,12 +1,58 @@
-# React + Vite
+# 🚀 Dijkstra Visualizer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 📌 Overview
+Dijkstra Visualizer is a web application that helps understand how **Dijkstra's algorithm** finds the shortest path in an `n × m` grid filled with walls.  
+Users can set a **source**, **destination**, and **obstacles (walls)** and then visualize the algorithm finding the shortest path.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🌟 Features
+✅ **Interactive Grid** – Click to set source, destination, and walls  
+✅ **Algorithm Visualization** – Watch how Dijkstra’s algorithm explores nodes  
+✅ **Real-time Animation** – Smooth visualization of the shortest path  
+✅ **Customizable Grid** – Change grid size and obstacles dynamically  
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript and enable type-aware lint rules. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🖥️ Initial Position  
+This is how the grid looks before the algorithm starts:
+
+<img src="https://github.com/user-attachments/assets/d8433c9b-3c29-45ad-a387-564d0be2b8d0" width="600" alt="Initial Grid State">
+
+---
+
+## 🏁 Final Shortest Path  
+After running Dijkstra’s algorithm, the shortest path is highlighted:
+
+<img src="https://github.com/user-attachments/assets/f60a4d8c-8fc3-4d9f-a229-01c19d9c019d" width="600" alt="Final Shortest Path">
+
+---
+
+## 🚀 How to Clone and Run the Project  
+
+### **1️⃣ Clone the Repository**  
+Open a terminal and run:
+
+```sh
+git clone https://github.com/sanjay-1458/Dijkstra-Visualizer.git
+```
+
+### **2️⃣ Navigate into the Project Folder**  
+
+```sh
+cd Dijkstra-Visualizer
+
+```
+
+### **3️⃣ Install Dependencies**  
+```sh
+npm install
+
+```
+
+### **4️⃣ Start the Development Server**  
+
+```sh
+npm run dev
+
+```
