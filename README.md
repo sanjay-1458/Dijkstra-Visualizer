@@ -56,3 +56,5 @@ npm install
 npm run dev
 
 ```
+## 🚀 Deployed Link
+https://dijkstra-visualizer-nu.vercel.app/
