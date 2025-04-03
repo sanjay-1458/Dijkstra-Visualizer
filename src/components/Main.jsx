@@ -15,7 +15,6 @@ function Main() {
       }))
     );
   };
-  
 
   const [grid, setGrid] = useState(createGrid(20, 20));
   const [activeGridState, setActiveGridState] = useState("empty");
@@ -23,6 +22,23 @@ function Main() {
   const [dijkstraFinal, setDijkstraFinal] = useState(null);
   const [walls, setWalls] = useState([]);
   const [isRunning, setIsRunning] = useState(false);
+  useEffect(() => {
+    const updateGridSize = () => {
+      const newGridSize = window.innerWidth < 600 ? 5 : 20;
+      setGrid(createGrid(newGridSize, newGridSize));
+      setDijkstraInitial(null);
+      setDijkstraFinal(null);
+      setWalls([]);
+      setActiveGridState("empty");
+      setIsRunning(false);
+    };
+
+    updateGridSize();
+
+    window.addEventListener("resize", updateGridSize);
+    return () => window.removeEventListener("resize", updateGridSize);
+  }, []);
+
 
   const toggleTool = (tool) => {
     setActiveGridState((prev) => (prev === tool ? "empty" : tool));
@@ -257,7 +273,7 @@ function Main() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen text-white text-center bg-gray-900">
-  <div className="flex flex-wrap justify-center gap-4 w-full p-4">
+      <div className="flex flex-wrap justify-center gap-4 w-full p-4">
         <button
           onClick={() => toggleTool("source")}
           disabled={isRunning}
@@ -292,13 +308,16 @@ function Main() {
           Walls
         </button>
       </div>
-      <div className="grid grid-cols-20 gap-1 border border-white">
+      <div
+        className="grid grid-cols-20 gap-1 border border-white"
+        style={{ "--cols": grid[0]?.length }}
+      >
         {grid.map((row, rowIndex) =>
           row.map((cell, colIndex) => (
             <div
               key={`${rowIndex}-${colIndex}`}
               onClick={() => handleCellClick(rowIndex, colIndex)}
-              className={`w-6 h-6 border border-gray-600 transition-all ${
+              className={`cell w-6 h-6 border border-gray-600 transition-all ${
                 cell.isSource
                   ? "bg-blue-400"
                   : cell.isDestination
@@ -313,22 +332,23 @@ function Main() {
           ))
         )}
       </div>
-      <div className="flex flex-wrap justify-around w-full">
-
-      <button
-        onClick={startDijkstra}
-        disabled={isRunning}
-        className="text-2xl px-6 py-3 rounded-lg bg-purple-500 hover:bg-purple-600 transition-all duration-300 
+      <div className="flex flex-wrap justify-center gap-8 w-full p-1">
+        <button
+          onClick={startDijkstra}
+          disabled={isRunning}
+          className="text-2xl px-6 py-3 rounded-lg bg-purple-500 hover:bg-purple-600 transition-all duration-300 
         shadow-purple-300 mt-4 scale-105 active:scale-110"
         >
-        Start
-      </button>
-      <button
-        onClick={() => navigate("/")}
-        className="text-2xl px-6 py-3 rounded-lg bg-pink-500 hover:bg-pink-600 transition-all duration-300 
+          Start
+        </button>
+        <button
+          onClick={() => navigate("/")}
+          className="text-2xl px-6 py-3 rounded-lg bg-pink-500 hover:bg-pink-600 transition-all duration-300 
         shadow-purple-300 mt-4 scale-105 active:scale-110"
-      >Home</button>
-        </div>
+        >
+          Home
+        </button>
+      </div>
       <Toaster position="top-right" />
     </div>
   );

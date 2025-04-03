@@ -1,4 +1,17 @@
 @import "tailwindcss";
+.grid {
+  display: grid;
+  grid-template-columns: repeat(var(--cols), 1fr);
+  gap: 2px;
+  width: fit-content;
+  margin: auto;
+}
+
+.cell {
+  width: 28px;
+  height: 28px;
+  border: 1px solid black;
+}
 .fade-enter {
   opacity: 0;
   transform: scale(0.95);
