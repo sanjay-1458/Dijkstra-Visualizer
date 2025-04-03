@@ -31,7 +31,13 @@ After running Dijkstra’s algorithm, the shortest path is highlighted:
 ## 🏁 Example Path  
 After running Dijkstra’s algorithm, the shortest path is highlighted:
 
+First: 
+
 <img src="https://github.com/user-attachments/assets/564bb3a4-2645-469d-9826-7026477e3564" width="600" alt="Final Shortest Path">
+
+Second:
+
+<img src="https://github.com/user-attachments/assets/8d9a9f69-502d-49ce-8ba6-6d0c7f1a9a05" width="600" alt="Final Shortest Path">
 
 ---
 
