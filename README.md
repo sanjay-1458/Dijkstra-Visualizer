@@ -14,30 +14,10 @@ Users can set a **source**, **destination**, and **obstacles (walls)** and then 
 
 ---
 
-## 🖥️ Initial Position  
-This is how the grid looks before the algorithm starts:
+## 🖥️  Path
 
-<img src="https://github.com/user-attachments/assets/d8433c9b-3c29-45ad-a387-564d0be2b8d0" width="600" alt="Initial Grid State">
+![image](https://github.com/user-attachments/assets/be411001-a798-4e57-bcd3-48c22677f009)
 
----
-
-## 🏁 Final Shortest Path  
-After running Dijkstra’s algorithm, the shortest path is highlighted:
-
-<img src="https://github.com/user-attachments/assets/f60a4d8c-8fc3-4d9f-a229-01c19d9c019d" width="600" alt="Final Shortest Path">
-
----
-
-## 🏁 Example Path  
-After running Dijkstra’s algorithm, the shortest path is highlighted:
-
-First: 
-
-<img src="https://github.com/user-attachments/assets/564bb3a4-2645-469d-9826-7026477e3564" width="600" alt="Final Shortest Path">
-
-Second:
-
-<img src="https://github.com/user-attachments/assets/8d9a9f69-502d-49ce-8ba6-6d0c7f1a9a05" width="600" alt="Final Shortest Path">
 
 ---
 
