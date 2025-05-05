@@ -311,7 +311,7 @@ function Main() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen text-white text-center bg-gray-900 p-4">
-      <div className="toolbar toolbar1">
+      <div className="toolbar toolbar1 flex flex-wrap">
         <button
           onClick={() => toggleTool("source")}
           disabled={isRunning}
