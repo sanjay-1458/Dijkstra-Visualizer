@@ -1,9 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
+import UseHelp from "./UseHelp";
+
+function getGridSize() {
+  const w = window.innerWidth;
+
+  if (w >= 1838) {
+    return { rows: 16, cols: 16 };
+  } else if (w >= 1219) {
+    return { rows: 16, cols: 16 };
+  } else if (w >= 1141) {
+    return { rows: 15, cols: 15 };
+  } else if (w >= 1073) {
+    return { rows: 14, cols: 14 };
+  } else if (w >= 922) {
+    return { rows: 12, cols: 12 };
+  } else if (w >= 748) {
+    return { rows: 10, cols: 10 };
+  } else if (w >= 614) {
+    return { rows: 8, cols: 8 };
+  } else {
+    return { rows: 5, cols: 5 };
+  }
+}
 
 function Main() {
   const navigate = useNavigate();
+  const [showHelp, setShowHelp] = useState(false);
+  const [isMouseDown, setIsMouseDown] = useState(false);
   const createGrid = (rows, cols) => {
     return Array.from({ length: rows }, () =>
       Array.from({ length: cols }, () => ({
@@ -15,17 +40,24 @@ function Main() {
       }))
     );
   };
+  const initialSize = getGridSize();
+  const [gridSize, setGridSize] = useState(initialSize);
 
-  const [grid, setGrid] = useState(createGrid(15, 15));
+  const [grid, setGrid] = useState(() =>
+    createGrid(initialSize.rows, initialSize.cols)
+  );
+
   const [activeGridState, setActiveGridState] = useState("empty");
   const [dijkstraInitial, setDijkstraInitial] = useState(null);
   const [dijkstraFinal, setDijkstraFinal] = useState(null);
   const [walls, setWalls] = useState([]);
   const [isRunning, setIsRunning] = useState(false);
   useEffect(() => {
-    const updateGridSize = () => {
-      const newGridSize = window.innerWidth < 600 ? 5 : 15;
-      setGrid(createGrid(newGridSize, newGridSize));
+    const handleResize = () => {
+      const newSize = getGridSize();
+      setGridSize(newSize);
+      setGrid(createGrid(newSize.rows, newSize.cols));
+
       setDijkstraInitial(null);
       setDijkstraFinal(null);
       setWalls([]);
@@ -33,10 +65,17 @@ function Main() {
       setIsRunning(false);
     };
 
-    updateGridSize();
-
-    window.addEventListener("resize", updateGridSize);
-    return () => window.removeEventListener("resize", updateGridSize);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  useEffect(() => {
+    const handleMouseUp = () => setIsMouseDown(false);
+    window.addEventListener("mouseup", handleMouseUp);
+    window.addEventListener("touchend", handleMouseUp);
+    return () => {
+      window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("touchend", handleMouseUp);
+    };
   }, []);
 
   const toggleTool = (tool) => {
@@ -272,25 +311,19 @@ function Main() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen text-white text-center bg-gray-900 p-4">
-      <div className="flex flex-wrap justify-center gap-2 sm:gap-4 w-full p-2 sm:p-4 mt-3 sm:mt-6">
+      <div className="toolbar toolbar1">
         <button
           onClick={() => toggleTool("source")}
           disabled={isRunning}
-          className={`button-class text-2xl px-4 py-2 rounded-lg transition ${
-            activeGridState === "source"
-              ? "bg-blue-400 scale-115 transition-transform duration-300 ease-in-out"
-              : "bg-blue-500"
-          }`}
+          className={`button ${activeGridState === "source" ? "selected" : ""}`}
         >
           Source
         </button>
         <button
           onClick={() => toggleTool("destination")}
           disabled={isRunning}
-          className={`button-class text-2xl px-4 py-2 rounded-lg transition ${
-            activeGridState === "destination"
-              ? "bg-green-400 scale-115 transition-transform duration-300 ease-in-out"
-              : "bg-green-500"
+          className={`button ${
+            activeGridState === "destination" ? "selected" : ""
           }`}
         >
           Destination
@@ -298,63 +331,84 @@ function Main() {
         <button
           onClick={() => toggleTool("wall")}
           disabled={isRunning}
-          className={` button-class text-2xl px-4 py-2 rounded-lg transition ${
-            activeGridState === "wall"
-              ? "bg-red-400 scale-115 transition-transform duration-300 ease-in-out"
-              : "bg-red-500"
-          }`}
+          className={`button ${activeGridState === "wall" ? "selected" : ""}`}
         >
           Walls
         </button>
+        <button onClick={() => setShowHelp(true)} className="button">
+          Use?
+        </button>
       </div>
+      <div className="spacer" />
       <div className="bg-white-500">
-        <div
-          className=" gap-1 border border-white mt-1 sm:mt-0 mb-1 sm:mb-6 sm:h-auto gap-[5%] sm:gap-6"
-          style={{
-            display: "grid",
-            gridTemplateColumns: `repeat(${grid[0]?.length}, 1fr)`,
-            gap: "5px",
-          }}
-        >
+        <div className="grid-container" style={{ "--cols": grid[0]?.length }}>
           {grid.map((row, rowIndex) =>
             row.map((cell, colIndex) => (
               <div
                 key={`${rowIndex}-${colIndex}`}
-                onClick={() => handleCellClick(rowIndex, colIndex)}
-                className={`cell w-6 h-6 border border-gray-600 transition-all ${
+                className={
                   cell.isSource
-                    ? "bg-blue-400"
+                    ? "cell cell-source"
                     : cell.isDestination
-                    ? "bg-green-400"
+                    ? "cell cell-destination"
                     : cell.isWall
-                    ? "bg-red-600"
+                    ? "cell cell-wall"
                     : cell.isPath
-                    ? "bg-blue-500"
-                    : "bg-gray-800"
-                }`}
-              ></div>
+                    ? "cell cell-path"
+                    : "cell"
+                }
+                onMouseDown={() => {
+                  setIsMouseDown(true);
+                  handleCellClick(rowIndex, colIndex);
+                }}
+                onMouseEnter={() => {
+                  if (isMouseDown && activeGridState === "wall") {
+                    handleCellClick(rowIndex, colIndex);
+                  }
+                }}
+                onMouseUp={() => setIsMouseDown(false)}
+                onTouchStart={() => {
+                  setIsMouseDown(true);
+                  handleCellClick(rowIndex, colIndex);
+                }}
+                onTouchMove={(e) => {
+                  const touch = e.touches[0];
+                  const target = document.elementFromPoint(
+                    touch.clientX,
+                    touch.clientY
+                  );
+
+                  if (target?.dataset?.row && target?.dataset?.col) {
+                    const row = parseInt(target.dataset.row, 10);
+                    const col = parseInt(target.dataset.col, 10);
+
+                    if (activeGridState === "wall" && isMouseDown) {
+                      handleCellClick(row, col);
+                    }
+                  }
+                }}
+                data-row={rowIndex}
+                data-col={colIndex}
+              />
             ))
           )}
         </div>
       </div>
-      <div className="flex flex-wrap justify-center gap-3 sm:gap-8 w-full p-2 sm:p-4 mb-3 sm:mb-6">
+      <div className="spacer" />
+      <div className="down__container">
         <button
           onClick={startDijkstra}
           disabled={isRunning}
-          className="text-xl sm:text-2xl px-5 sm:px-6 py-2 sm:py-3 rounded-lg bg-purple-500 hover:bg-purple-600 transition-all duration-300 
-      shadow-purple-300 mt-3 sm:mt-4 scale-105 active:scale-110"
+          className="button mx-2"
         >
           Start
         </button>
-        <button
-          onClick={() => navigate("/")}
-          className="text-2xl px-6 py-3 rounded-lg bg-pink-500 hover:bg-pink-600 transition-all duration-300 
-        shadow-purple-300 mt-4 scale-105 active:scale-110"
-        >
+        <button onClick={() => navigate("/")} className="button mx-2">
           Home
         </button>
       </div>
       <Toaster position="top-right" />
+      <UseHelp isOpen={showHelp} onClose={() => setShowHelp(false)} />
     </div>
   );
 }
